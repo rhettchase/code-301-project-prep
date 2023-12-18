@@ -36,7 +36,7 @@ module.exports = async function getStandings(request, response) {
 class TeamStanding {
   constructor(teamData, leagueCode) {
     try {
-      console.log('Raw data:', teamData); 
+      console.log('Raw data:', teamData);
       this.league = { code: leagueCode };
       this.standings = [];
 
@@ -44,14 +44,17 @@ class TeamStanding {
 
       if (standings && standings.length > 0) {
         this.standings = standings.map((standing) => {
-          const teamInfo = standing.team || (standing.team[0] && standing.team[0]);
+          const teamInfo = standing.team || (standing.team[0] && standing.team[0].team);
+
+          const teamId = teamInfo?.id || (teamInfo.team && teamInfo.team.id) || 0;
+          const crest = `https://crests.football-data.org/${teamId}.png`;
 
           return {
             position: standing.position || 0,
-            id: teamInfo?.id || 0,
+            id: teamId,
             name: teamInfo?.name || '',
             tla: teamInfo?.tla || '',
-            crest: teamInfo?.crestUrl || '', 
+            crest: crest,
             playedGames: standing.playedGames || 0,
             won: standing.won || 0,
             draw: standing.draw || 0,
@@ -70,8 +73,6 @@ class TeamStanding {
     }
   }
 }
-
-
 
 
 // Function to save results to MongoDB

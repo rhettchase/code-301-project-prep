@@ -4,8 +4,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const LeagueResultModel = require('./models/leagueResults');
-const getResults = require('./handlers/results');
 const getStandings = require('./handlers/standings');
 
 const PORT = process.env.PORT || 3001;
@@ -25,7 +23,7 @@ app.use(cors());
 app.use(express.json());
 
 // routes
-app.get('/results', getResults);
+// app.get('/highlights', getHighlights);
 app.get('/standings/:leagueCode', getStandings);
 
 app.use((error, request, response, next) => {
